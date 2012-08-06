@@ -1,12 +1,10 @@
-arch=arm
-CC=arm-eabi-gcc
-KDIR=/root/workspace/kernel/goldfish
 ifneq ($(KERNELRELEASE),)
 	obj-m := globalfifo.o
 else
-	PWD=$(shell pwd)
-module:
+	KDIR ?= /lib/modules/$(shell uname -r)/build
+	PWD := $(shell pwd)
+modules:
 	$(MAKE) -C $(KDIR) M=$(PWD) modules
-endif 
+endif
 clean:
-	rm -fr *.ko *.mod.c *.o *.order *.symvers
+	rm -rf *.o *~ .depend *.ko  *.order *.symvers *.mod.c
