@@ -5,6 +5,7 @@
 #include <linux/platform_device.h>
 MODULE_AUTHOR("wk") ;
 MODULE_LICENSE("Dual BSD/GPL") ;
+
 static int globalfifo_ioctl(struct inode *inode ,struct file *file,
 	unsigned int cmd ,unsigned long arg)
 {
