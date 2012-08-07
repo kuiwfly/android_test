@@ -9,3 +9,6 @@ clean:
 	@for dir in $(SUBDIRS);\
 	do make clean -C $${dir};\
 	done
+.PHONY:execute
+execute:
+	./test/main
