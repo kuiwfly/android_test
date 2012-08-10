@@ -19,8 +19,8 @@ int main()
 		FD_SET(fd,&rfds) ;
 		//FD_SET(fd,&wfds) ;
 		
-		//select(fd+1,&rfds,&wfds,NULL,NULL) ;
-		select(fd,&rfds,NULL,NULL,NULL) ;
+		select(fd+1,&rfds,&wfds,NULL,NULL) ;
+//		select(fd,&rfds,NULL,NULL,NULL) ;
 		if(FD_ISSET(fd,&rfds)){
 			printf("%s:globalfifo have data to read!\n",__func__) ;
 			printf("read.......\n") ;
