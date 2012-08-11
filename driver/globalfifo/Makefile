@@ -1,1 +1,1 @@
-obj-$(CONFIG_GLOBALFIFO)+=globalfifo.o
+obj-$(CONFIG_GLOBALFIFO)+= globalfifo.o

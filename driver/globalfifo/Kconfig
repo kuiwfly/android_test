@@ -1,0 +1,5 @@
+config GLOBALFIFO
+	tristate "Global Fifo Driver"
+	default n
+	help
+	This is a android test deriver.

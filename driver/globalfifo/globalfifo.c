@@ -8,6 +8,7 @@
 #include <linux/cdev.h>//char device structure definition
 #include <linux/io.h>//io operation function ,like ioremap,iowrite
 #include <linux/poll.h>
+#include <linux/device.h>
 
 #define KERNEL_OLD 1
 MODULE_AUTHOR("wk") ;
@@ -17,6 +18,9 @@ MODULE_LICENSE("Dual BSD/GPL") ;
 #define CLEAR_ALL 0x01 //clear fifo 
 #define GLOBALFIFO_MAJOR 243//major device No
 
+#define DEVICE_NAME "globalfifo"
+
+static struct class *globalfifo_class=NULL ;
 static int globalfifo_major = GLOBALFIFO_MAJOR  ;
 /*define globalfifo structure*/
 struct globalfifo_dev {
@@ -228,15 +232,29 @@ int __init globalfifo_init(void)
 	init_MUTEX(&globalfifo_devp->sem) ;
 	init_waitqueue_head(&globalfifo_devp->r_wait) ;
 	init_waitqueue_head(&globalfifo_devp->w_wait) ;
+
+	globalfifo_class = class_create(THIS_MODULE, DEVICE_NAME) ;
+	if( IS_ERR( globalfifo_class) ){
+		printk(KERN_INFO "ERR:can't create globalfifo device class!\n") ;	
+		goto destroy_all ;
+	}
+	device_create(globalfifo_class, NULL,devno,0,DEVICE_NAME) ; 
 	printk(KERN_INFO "init globalfifo device successfully!\n" ) ;
 	return 0 ;
+destroy_all:
+	cdev_del(&globalfifo_devp->dev) ;
+	kfree(globalfifo_devp) ;
+		
 fail_malloc:
 	unregister_chrdev_region(devno,1) ;
 	return ret ;
 }
 void __exit globalfifo_exit(void)
 {
+	
 	if(globalfifo_devp != NULL ){
+		device_destroy(globalfifo_class,MKDEV(globalfifo_major,0)) ;
+		class_destroy(globalfifo_class) ;
 		cdev_del(&globalfifo_devp->dev) ;
 		kfree(globalfifo_devp) ;
 		unregister_chrdev_region(MKDEV(globalfifo_major,0),1) ;
