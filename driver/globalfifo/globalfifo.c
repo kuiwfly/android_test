@@ -136,11 +136,9 @@ static ssize_t globalfifo_write(struct file *filp, const char __user *buf,
 {
 	struct globalfifo_dev *dev = filp->private_data ;
 	int ret = -1 ;
-	DECLARE_WAITQUEUE(wait,current) ;
-	
+	DECLARE_WAITQUEUE(wait,current) ;	
 	down_interruptible(&dev->sem) ;
 	add_wait_queue(&dev->w_wait,&wait) ;
-	
 	if(dev->current_len == GLOBALFIFO_SIZE)
 	{
 		if(filp->f_flags & O_NONBLOCK)
