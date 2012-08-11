@@ -1,4 +1,4 @@
-SUBDIRS := driver/globalfifo test
+SUBDIRS := driver/globalfifo test multithread
 .PHONY :all
 all:
 	@for dir in $(SUBDIRS) ;\

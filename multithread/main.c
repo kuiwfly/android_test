@@ -31,7 +31,7 @@ void *thread_fun1(void *param)
 {
     b_thrd1_ready=true ;
     pthread_mutex_lock(&wait_all_start) ;
-    while(!all_threads_start){
+    while(!all_threads_start){/*avoid*/
         pthread_cond_wait(&condition,&wait_all_start) ;
     }
     pthread_mutex_unlock(&wait_all_start) ;

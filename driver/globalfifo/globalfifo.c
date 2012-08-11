@@ -59,6 +59,7 @@ static int globalfifo_ioctl(struct inode *inode, struct file *filp,
 	}
 }
 #else
+
 #endif
 static unsigned int globalfifo_poll(struct file *filp, poll_table *wait)
 {
@@ -187,7 +188,10 @@ static const struct file_operations globalfifo_fops = {
 	.open = globalfifo_open ,
 	.read = globalfifo_read ,
 	.write = globalfifo_write ,
+#if KERNEL_OLD
 	.ioctl = globalfifo_ioctl ,
+#else
+#endif
 	.poll = globalfifo_poll ,
 	.release = globalfifo_release ,
 } ;
