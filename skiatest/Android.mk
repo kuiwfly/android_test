@@ -28,7 +28,7 @@ include $(BUILD_SHARED_LIBRARY)
 ################################
 # Build Application
 ###############################
-LOCAL_PATH := $(call my-dir)
+#LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE_TAGS :=optional
@@ -37,7 +37,8 @@ LOCAL_SRC_FILES := \
 	main.c
 
 LOCAL_SHARED_LIBRARIES :=\
-	libpadtimestamp	
+	libpadtimestamp	\
+	libdl
 
 LOCAL_PRELINK_MODULE :=false 
 LOCAL_MODULE:= testskia

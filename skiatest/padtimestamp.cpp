@@ -14,10 +14,11 @@ uint8_t get_timestamp_pad(uint8_t *src, char *str_stamp, uint32_t width, uint32_
 	mBmp.setPixels(src,NULL) ;
 
 	SkPaint mPaint ;
-	mPaint.setColor(SK_ColorBLACK) ;
-	
+	mPaint.setColor(SK_ColorRED) ;
+	mPaint.setTextSize(40) ;
+
 	SkCanvas mCanvas(mBmp) ;
-	mCanvas.drawText(str_stamp,10,5,5,mPaint) ;
+	mCanvas.drawText(str_stamp,strlen(str_stamp),5,50,mPaint) ;
 	
 	return 1 ;
 }
@@ -30,8 +31,8 @@ void save_image(uint8_t *img, uint32_t width, uint32_t height)
 	
 	mBmp.setConfig(SkBitmap::kARGB_8888_Config,width,height) ;
 	mBmp.setPixels(img,NULL) ;
-	SkImageEncoder::EncodeFile("system/bin/snapshot.png",mBmp,
-		SkImageEncoder::kPNG_Type,
+	SkImageEncoder::EncodeFile("system/bin/snapshot.jpg",mBmp,
+		SkImageEncoder::kJPEG_Type,
 		100) ;
 }
 }
