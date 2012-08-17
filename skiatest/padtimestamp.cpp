@@ -23,13 +23,13 @@ uint8_t get_timestamp_pad(uint8_t *src, char *str_stamp, uint32_t width, uint32_
 }
 void save_image(uint8_t *img, uint32_t width, uint32_t height)
 {
-	if(src == NULL) {
+	if(img == NULL) {
 		return  ;
 	}
 	SkBitmap mBmp ;
 	
 	mBmp.setConfig(SkBitmap::kARGB_8888_Config,width,height) ;
-	mBmp.setPixels(src,NULL) ;
+	mBmp.setPixels(img,NULL) ;
 	SkImageEncoder::EncodeFile("system/bin/snapshot.png",mBmp,
 		SkImageEncoder::kPNG_Type,
 		100) ;
