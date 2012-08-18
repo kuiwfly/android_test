@@ -22,6 +22,7 @@ int main()
 		printf("get pad failed!\n") ;
 		return -1 ;	
 	}
+/*
 	int i,j ;
 	int *data=(int*)ptr_src ;
 	for(i=0;i<height;i++)
@@ -34,6 +35,7 @@ int main()
 			data++ ;
 		}
 	}
-	save_image(ptr_src,width,height) ;
+*/
+//	save_image(ptr_src,width,height) ;
 	return 0 ;
 }
