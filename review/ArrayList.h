@@ -1,7 +1,11 @@
+#include <iostream>
+#include <string.h>
 #include "List.h"
 using namespace std ;
+
 #define BUFINC 16 
 #define CEILLEN(len) ((len)|0x000F)
+
 template <typename T>//note:template class usage
 class ArrayList :public List<T>//note:inheritance usage
 {
@@ -16,6 +20,7 @@ public:
 	bool Remove(const T& elem) ;
 	T RemoveAt(int index) ;
 	T GetAt(int index) const ;//note: standard usage 
+	int GetLength() const ;
 	
 	void Print() const ;
 	
@@ -23,6 +28,7 @@ public:
 	void SelectSort() ;
 	void InsertSort() ;
 	void QuickSort() ;
+	void ShellSort() ;
 private:
 	T *mArray ;
 	int mIndex ;
@@ -64,9 +70,77 @@ template <class T>
 bool ArrayList<T>::Append(const T& elem)
 {
 	if(mIndex == mLength-1){
-		
+		T *tmpArray = new T[mLength+BUFINC] ;
+		memcpy(tmpArray,mArray,mLength*sizeof(T)) ;
+		delete[] mArray ;
+		mArray = tmpArray ;
 	}	
 	mArray[++mIndex] = elem ;
 	return true ;
 }
-
+template <class T>
+bool ArrayList<T>::Insert(const T& elem)
+{
+	if(mIndex == mLength-1) {
+		T *tmpArray = new T[mLength+BUFINC] ;
+		T *tmpArray1 = tmpArray++ ;
+		memcpy(tmpArray1,mArray,mLength*sizeof(T)) ;
+		mLength += BUFINC ;
+		mIndex++ ;
+		tmpArray[0] = elem ;
+		delete[] mArray ;
+		mArray = tmpArray ;
+		
+		return true ;
+	}	
+	int tmpIndex = mIndex ;
+	while(tmpIndex--){
+		mArray[tmpIndex+1] = mArray[tmpIndex] ;
+	}
+	mArray[0] = elem ;
+	return true ;
+}
+template <class T>
+void ArrayList<T>::Print() const
+{
+	for(int i=0 ; i<=mIndex ; i++){
+		cout<<mArray[i]<<',' ;
+	}
+	cout<<endl ;
+}
+template <class T>
+T ArrayList<T>::RemoveAt(int index) 
+{
+	T tmp = mArray[index] ;
+	return tmp ;	
+}
+template <class T>
+T ArrayList<T>::GetAt(int index) const
+{
+	return mArray[index] ;
+}
+template <class T>
+int ArrayList<T>::GetLength() const
+{
+	return mLength ;
+}
+template <class T>
+void ArrayList<T>::BubbleSort()
+{
+}
+template <class T>
+void ArrayList<T>::SelectSort()
+{
+}
+template <class T>
+void ArrayList<T>::InsertSort()
+{
+}
+template <class T>
+void ArrayList<T>::QuickSort()
+{
+}
+template <class T>
+void ArrayList<T>::ShellSort()
+{
+}

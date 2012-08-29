@@ -17,4 +17,5 @@ class List
 	virtual void SelectSort() =0 ;
 	virtual void InsertSort() = 0 ;
 	virtual void QuickSort() = 0 ;
+	virtual void ShellSort() = 0 ;
 };
