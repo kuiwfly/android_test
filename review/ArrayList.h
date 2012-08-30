@@ -1,3 +1,5 @@
+#ifndef _ARRAYLIST_H
+#define _ARRAYLIST_H
 #include <iostream>
 #include <string.h>
 #include "List.h"
@@ -289,3 +291,4 @@ void ArrayList<T>::MergerSort()
 	delete[] mArray ;
 	mArray=tmpArray ;
 }
+#endif

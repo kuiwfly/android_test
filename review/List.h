@@ -1,3 +1,5 @@
+#ifndef _LINK_H
+#define _LINK_H
 template <class T>
 class List 
 {
@@ -21,3 +23,4 @@ class List
 	virtual void HeapSort() = 0 ;
 	virtual void MergerSort() = 0 ;
 };
+#endif
