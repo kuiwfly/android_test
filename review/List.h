@@ -18,4 +18,6 @@ class List
 	virtual void InsertSort() = 0 ;
 	virtual void QuickSort() = 0 ;
 	virtual void ShellSort() = 0 ;
+	virtual void HeapSort() = 0 ;
+	virtual void MergerSort() = 0 ;
 };

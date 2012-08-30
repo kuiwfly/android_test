@@ -13,7 +13,10 @@ int main()
 	}
 //	arrayList.BubbleSort() ;
 //	arrayList.InsertSort() ;
-	arrayList.SelectSort() ;
+//	arrayList.SelectSort() ;
+//	arrayList.QuickSort() ;
+//	arrayList.ShellSort() ;
+	arrayList.MergerSort() ;
 	arrayList.Print() ;
 /*
 	ArrayList<int> arrayList ;
