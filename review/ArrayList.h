@@ -250,26 +250,19 @@ void Merge(T array[] , T tmpArray[],  int left, int right ,int middle)
 			tmpArray[k++] = array[j++] ;
 		}
 	}
-/*
 	if(i<=middle){
-		for(int m=i ;m<=middle ;m++){
-			tmpArray[k++] = array[m] ;
-		}
-	}
-	if(j<=right) {
-		for(int m=j ;m<=right ;m++){
-			tmpArray[k++] = array[m] ;
-		}
-	}
-*/
-//*
-	if(i<=middle){
-		memcpy(&(tmpArray[k]),&(array[i]),(middle-i+1)*sizeof(T)) ;
+		memcpy(tmpArray+k,array+i,(middle-i+1)*sizeof(T)) ;
 	}
 	if(j<=right){
-		memcpy(&(tmpArray[k]),&(array[j]),(right-j+1)*sizeof(T)) ;
+		memcpy(tmpArray+k,array+j,(right-j+1)*sizeof(T)) ;
 	}
-//*/
+	memcpy(array+left,tmpArray+left,(right-left+1)*sizeof(T)) ;
+	
+	for(i=left;i<=right;i++){
+		cout<<tmpArray[i]<<"," ;
+	}
+	cout<<endl ;
+	
 }
 template <class T>
 void MergerSort_T(T array[],T tmpArray[], int left, int right)
@@ -288,7 +281,6 @@ void ArrayList<T>::MergerSort()
 {
 	T* tmpArray = new T[mIndex] ;
 	MergerSort_T(mArray,tmpArray,0,mIndex-1) ;
-	delete[] mArray ;
-	mArray=tmpArray ;
+	delete[] tmpArray ;
 }
 #endif
