@@ -37,9 +37,11 @@ private:
 template <class T>
 ArrayList<T>::ArrayList()
 {
-	mArray = NULL ;
+//	mArray = NULL ;
 	mIndex = 0 ;
-	mLength = 0 ;
+//	mLength = 0 ;
+	mArray = new T[BUFINC] ;
+	mLength = BUFINC ;
 }
 template <class T>
 ArrayList<T>::~ArrayList()
@@ -75,15 +77,16 @@ bool ArrayList<T>::Append(const T& elem)
 		delete[] mArray ;
 		mArray = tmpArray ;
 	}	
-	mArray[++mIndex] = elem ;
+	mArray[mIndex++] = elem ;
 	return true ;
 }
 template <class T>
 bool ArrayList<T>::Insert(const T& elem)
 {
+//	cout<<"insert:"<<elem<<endl ;
 	if(mIndex == mLength-1) {
 		T *tmpArray = new T[mLength+BUFINC] ;
-		T *tmpArray1 = tmpArray++ ;
+		T *tmpArray1 = tmpArray+1 ;
 		memcpy(tmpArray1,mArray,mLength*sizeof(T)) ;
 		mLength += BUFINC ;
 		mIndex++ ;
@@ -93,7 +96,7 @@ bool ArrayList<T>::Insert(const T& elem)
 		
 		return true ;
 	}	
-	int tmpIndex = mIndex ;
+	int tmpIndex = mIndex++ ;
 	while(tmpIndex--){
 		mArray[tmpIndex+1] = mArray[tmpIndex] ;
 	}
@@ -103,10 +106,16 @@ bool ArrayList<T>::Insert(const T& elem)
 template <class T>
 void ArrayList<T>::Print() const
 {
-	for(int i=0 ; i<=mIndex ; i++){
+	for(int i=0 ; i<mIndex ; i++){
 		cout<<mArray[i]<<',' ;
 	}
 	cout<<endl ;
+}
+template <class T>
+bool ArrayList<T>::Remove(const T& elem)
+{
+	
+	return true ;
 }
 template <class T>
 T ArrayList<T>::RemoveAt(int index) 
@@ -125,16 +134,51 @@ int ArrayList<T>::GetLength() const
 	return mLength ;
 }
 template <class T>
+void inline swap_T(T& a,T& b)
+{
+	if(a == b){
+		return ;
+	}	
+	a = a^b ;
+	b = a^b ;
+	a = a^b ;
+}
+template <class T>
 void ArrayList<T>::BubbleSort()
 {
+	for(int i=0 ; i<mIndex ; i++){
+		for(int j=0 ; j<(mIndex-i-1) ; j++) {
+			if(mArray[j]<mArray[j+1]){
+				swap_T(mArray[j],mArray[j+1]) ;
+			}	
+		}
+		Print() ;
+	}
 }
 template <class T>
 void ArrayList<T>::SelectSort()
 {
+	for(int i=0 ; i<mIndex ; i++) {
+		for(int j=i ; j<mIndex ; j++){
+			if(mArray[i]>mArray[j]){
+				swap(mArray[i],mArray[j]) ;
+			}	
+		}
+	}	
 }
 template <class T>
 void ArrayList<T>::InsertSort()
 {
+	for(int i=0 ; i<mIndex ; i++) {
+		for(int j=i ; j>0 ; j--) {
+			if(mArray[j]<mArray[j-1]){
+				swap_T(mArray[j],mArray[j-1]) ;
+			}else{
+				break ;
+			}	
+		}
+		Print() ;
+	}
 }
 template <class T>
 void ArrayList<T>::QuickSort()
