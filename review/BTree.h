@@ -2,6 +2,7 @@
 #define _BTREE_H
 #include <iostream>
 #include <string.h>
+#include <deque>
 using namespace std ;
 template <class DataType>
 struct BTreeNode {
@@ -128,7 +129,50 @@ template <class DataType>
 BTreeNode <DataType> *BTree<DataType>::CreateBTreeNonRecursive(DataType *data, int len)
 {
 	BTreeNode *pRoot = new BTreeNode(data[0]) ;
+	int index = 0 ;
+
+	/*two stacks,one is for node and the other is for index*/
+	deque<DataType> tmpStack  ;
+	deque<int> indexStack ;
+
+	tmpStack.push_front(pRoot) ;
+	indexStack.push_front(index) ;
+
+	BTreeNode *tmpNode = NULL ;
+	while(!tmpStack.empty()){
+		tmpNode = tmpStack.pop_front() ;	
+		index = indexStack.pop_front() ;
+
+		if(2*index+1<len){
+			tmpNode->mLeft = new BTreeNode(data[2*index+1]) ;
+			tmpStack.push_front(tmpNode->mLeft) ;
+			indexStack.push_front(2*index+1) ;
+		}else{
+			tmpNode->mLeft = NULL ;
+		}
+
+		if(2*index+2<len){
+			tmpNode->mRight = new BTreeNode(data[2*index+2]) ;
+			tmpStack.push_front(tmpNode->mRight) ;
+			indexStack.push_front(2*index+1) ;
+		}else{
+			tmpNode->mRight = NULL ;
+		}
+	}
 	return pRoot ;
 }
+template <class DataType>
+void BTree<DataType>::PreOrderRecursive(BTreeNode<DataType> *pRoot)
+{
+	if(pRoot!=NULL){
+		Print(pRoot) ;
+		PreOrderRecursive(pRoot->mLeft) ;
+		PreOrderRecursive(pRoot->mRight) ;
+	}
+}
+template <class DataType>
+void BTree<DataType>::PreOrderNonRecursive(BTreeNode<DataType> *pRoot)
+{
 
+}
 #endif 
