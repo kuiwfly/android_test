@@ -171,10 +171,147 @@ void selectsort(struct link_node *p_head){
 		
 	}
 }
+struct duallink_node{
+	int data ;
+	struct duallink_node *pre ;
+	struct duallink_node *next ;
+} ;
+struct duallink_node * create_duallinklist(const int *data,int len){
+	if(data == NULL){
+		return ;
+	}	
+	struct duallink_node *p_head = (struct duallink_node*)malloc(sizeof(struct duallink_node)) ;
+	struct duallink_node *p_tmp = p_head ;
+	
+	p_head->pre = NULL ;
+
+	int i = 0 ;
+	for(i=0 ; i<len ; i++){
+		p_tmp->next = (struct duallink_node*) malloc(sizeof(struct duallink_node)) ;
+		p_tmp->next->data = data[i] ;
+		p_tmp->next->pre = p_tmp ; 
+		p_tmp = p_tmp->next ;
+	}
+	p_tmp->next = NULL ;
+	return p_head ;	
+/******************************THis method is wrong************************************************************
+	struct duallink_node *p_head = (struct duallink_node*)malloc(sizeof(struct duallink_node)*(len+1)) ;
+	struct duallink_node *p_tmp = p_head ;
+	
+	p_tmp->pre = NULL ;
+	int i=0 ;
+	for(i=0;i<len;i++){
+		p_tmp->next = p_head+i+1 ;		
+		p_tmp->next->data = data[i] ;
+		p_tmp->next->pre = p_head+i ;
+		p_tmp = p_tmp->next ;
+	}
+	p_head[i].next = NULL ;
+	p_head[i].pre = p_head+i-1 ;
+
+	p_head[0].pre = NULL ;
+	return p_head ;
+****************************This method is wrong*****************************************************************/
+}
+void print_duallinklist(struct duallink_node *p_head) {
+	if(p_head == NULL){
+		return ;
+	}
+	struct duallink_node *p_tmp = p_head;
+/*
+	while(p_tmp ->next != NULL){
+		printf("%d,",p_tmp->data) ;
+		p_tmp = p_tmp->next ;
+	}
+*/	
+	do{
+		p_tmp = p_tmp->next ;
+		printf("%d,",p_tmp->data) ;
+	}while(p_tmp->next!=NULL) ;
+	printf("\n") ;
+	while(p_tmp!=p_head){
+		printf("%d,",p_tmp->data) ;
+		p_tmp = p_tmp->pre ;
+	}
+	printf("\n") ;
+/*
+	while(p_tmp != p_head){
+		printf("%d,",p_tmp->data) ;
+		p_tmp = p_tmp->pre ;
+	}
+	printf("\n") ;
+*/
+}
+void insert_duallinklist(struct duallink_node *p_head, int data) {
+	if(p_head == NULL){
+		return ;
+	}
+	struct duallink_node *p_tmp = (struct duallink_node*)malloc(sizeof(struct duallink_node)) ;
+	p_tmp->data = data ;
+	p_tmp->pre = p_head ;
+	p_tmp->next = p_head->next ;
+	p_tmp->next->pre = p_tmp ;
+	p_head->next = p_tmp ;
+}
+void append_duallinklist(struct duallink_node *p_head, int data) {
+	if(p_head == NULL){
+		return ;
+	}
+	struct duallink_node *p_tmp = p_head->next ;
+	do {
+		p_tmp = p_tmp->next ;
+	}while(p_tmp->next != NULL) ;
+	p_tmp->next = (struct duallink_node*)malloc(sizeof(struct duallink_node)) ;
+	p_tmp->next->data = data ;
+	p_tmp->next->pre = p_tmp ;
+	p_tmp->next->next = NULL ; 
+}
+void remove_duallinklist(struct duallink_node *p_head,int data){
+	if(p_head == NULL){
+		return ;
+	}
+	struct duallink_node *p_tmp = p_head ;
+	struct duallink_node *p_tmp1 = NULL ;
+	while(p_tmp->next!=NULL){
+		if(p_tmp->next->data == data){
+			p_tmp1 = p_tmp->next ;
+			p_tmp->next = p_tmp1->next ;
+			p_tmp->next->pre = p_tmp ;	
+			free(p_tmp1) ;
+			break ;
+		}
+		p_tmp = p_tmp->next ;
+	}
+}
+void remove_all(struct duallink_node *p_head){
+	if(p_head == NULL){
+		return ;
+	}
+	struct duallink_node *p_tmp = p_head->next  ;
+	do{
+		p_tmp=p_tmp->next ;
+		printf("delete:%d\n",p_tmp->pre->data) ;
+		free(p_tmp->pre) ;
+	}while(p_tmp->next!=NULL) ;
+	printf("delete:%d\n",p_tmp->data) ;
+	free(p_tmp) ;
+}
 int main()
 {
 	int data[] = {20 ,14, 32, 43,21, 79, 4,9,23,56,42} ;
 	int len = sizeof(data)/sizeof(data[0]) ;
+	struct duallink_node* p_head = create_duallinklist(data,len) ;
+	print_duallinklist(p_head) ;
+	
+	insert_duallinklist(p_head,99) ;
+	print_duallinklist(p_head) ;
+	append_duallinklist(p_head,111) ;
+	print_duallinklist(p_head) ;
+
+	remove_duallinklist(p_head,32) ;
+	print_duallinklist(p_head) ;
+	remove_all(p_head) ;
+/*
 	struct link_node *p_head = create_linklist(data, len) ;
 	int location = 4 ;
 	printf("create loop link list! loop location at %d\n",location) ;
@@ -191,5 +328,6 @@ int main()
 	has_loop(p_head) ;
 	has_loop(p_loop_head) ;
 	printf("loop location :%d\n",locate_loop(p_loop_head)) ;
+*/
 	return 0 ;
 }
