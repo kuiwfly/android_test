@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <memory.h>
+typedef int elemtype ;
 typedef struct link_node {
 	struct link_node *next ;
-	int data ;
+	elemtype data ;
 }LinkNode ;
 struct link_node *create_linklist(int *data, int len){
 	if(data == NULL){
@@ -296,10 +297,166 @@ void remove_all(struct duallink_node *p_head){
 	printf("delete:%d\n",p_tmp->data) ;
 	free(p_tmp) ;
 }
+/***************************************circle queue used array************************/
+#define QUEUESIZE 20
+static elemtype queue[QUEUESIZE] ;
+static int head = 0 ;
+static int tail = 0 ;
+int is_full(){
+/*note: enqueue form head ,and dequeue from tail,or reverse*/
+	return ((head+1)%QUEUESIZE) == tail ;
+}
+int is_empty(){
+	return head == tail ;
+}
+int enqueue(elemtype elem){
+	if(is_full()){
+		return 0 ;
+	}
+	queue[head] = elem ;
+	head = (head+1)%QUEUESIZE ;
+	return 1 ;
+}
+int dequeue(elemtype *elem){
+	if(is_empty()){
+		return 0 ;
+	}
+	*elem = queue[tail] ;
+	tail = (tail+1)%QUEUESIZE ;
+	return 1 ;
+}
+/***************************************circle queue************************/
+/**************************************stack used by array****************/
+#define STACKSIZE 10
+static elemtype stack[STACKSIZE] ;
+static sp = 0 ;
+
+int is_full_stack(){
+	return sp == STACKSIZE ;
+}
+int is_empty_stack(){
+	return sp == 0 ;
+}
+int push(elemtype elem){
+	if(is_full_stack()){
+		return 0 ;
+	}
+	stack[sp] = elem ;
+	sp++ ;
+	return 1 ;
+}
+int pop(elemtype *elem){
+	if(is_empty_stack()){
+		return 0 ;
+	}
+	sp-- ;
+	*elem = stack[sp] ;
+	return 1 ;
+}
+/**************************************stack used by array****************/
+/**************************************queue implemented by link********/
+struct linkqueue{
+	struct link_node *head ;
+	struct link_node *tail ;
+	int count ;
+} ;
+/*note: queue implemented by link ,link direction head->tail whick is useful to pointer operation*/
+int is_empty_linkqueue(struct linkqueue *queue){	
+	return queue->tail == NULL  ;
+}
+struct linkqueue* enqueue_link(struct linkqueue* queue, int data){
+	struct link_node *p_tmp = (struct link_node*)malloc(sizeof(struct link_node)) ;
+	p_tmp->data = data ;
+	p_tmp->next = NULL ;
+		
+	if(queue->tail == NULL){
+		queue->tail = p_tmp ;
+		queue->head = p_tmp ;
+	}else{
+		queue->tail->next = p_tmp ;
+		queue->tail = p_tmp ;
+	}
+	return queue ;
+}
+int dequeue_link(struct linkqueue* queue, elemtype *elem){
+	struct link_node *p_tmp = NULL ;
+	if(queue->head != NULL){
+		p_tmp = queue->head ;
+		*elem = p_tmp->data ;
+		if(queue->head == queue->tail){
+			queue->tail = NULL ;
+			queue->head = NULL ;
+		}else{
+			queue->head = queue->head->next ;
+		}	
+		free(p_tmp) ;
+		p_tmp = NULL ;
+		return 1 ;
+	}else{
+		return 0 ;	
+	}	
+	return queue ;
+}
+/**************************************queue implemented by link********/
+
 int main()
 {
 	int data[] = {20 ,14, 32, 43,21, 79, 4,9,23,56,42} ;
 	int len = sizeof(data)/sizeof(data[0]) ;
+	int i=0 ;
+	struct linkqueue *p_queue = (struct linkqueue*)malloc(sizeof(struct linkqueue)) ;
+	p_queue->head = NULL ;
+	p_queue->tail = NULL ;
+
+	for(i=0;i<len;i++){
+		enqueue_link(p_queue,data[i]) ;	
+	}
+	elemtype tmp ;
+	while(1){
+		if(dequeue_link(p_queue,&tmp)){
+			printf("%d,",tmp) ;
+		}else {
+			printf("\n") ;
+			printf("queue is empty!\n") ;
+			break ;
+		}
+	}
+	
+/*test queue implemented by link list
+	for(i=0;i<len;i++){
+		
+		if(!push(data[i])){
+			printf("stack is full!\n") ;
+		}
+	}
+	elemtype *tmp ;
+	while(1){
+		if(pop(&tmp)){
+			printf("%d,",tmp) ;
+		}else{
+			printf("\n") ;
+			printf("stack is empty!\n") ;
+			break ;
+		}	
+	}
+*/
+/*test circle queue implmented by array
+	for(i=0;i<len;i++){
+		enqueue(data[i]) ;
+	}
+	printf("head=%d,tail=%d\n",head,tail) ;
+	int tmp = -1 ;
+	for(i = 0;i<QUEUESIZE;i++){
+		if(dequeue(&tmp)){
+			printf("%d,",tmp) ;
+		}else{
+			printf("\n") ;
+			printf("queue is empty!\n") ;
+			break ;
+		}	
+	}
+*/
+/*test dual link list
 	struct duallink_node* p_head = create_duallinklist(data,len) ;
 	print_duallinklist(p_head) ;
 	
@@ -311,7 +468,8 @@ int main()
 	remove_duallinklist(p_head,32) ;
 	print_duallinklist(p_head) ;
 	remove_all(p_head) ;
-/*
+*/
+/*test single link list 
 	struct link_node *p_head = create_linklist(data, len) ;
 	int location = 4 ;
 	printf("create loop link list! loop location at %d\n",location) ;
