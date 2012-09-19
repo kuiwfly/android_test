@@ -398,12 +398,67 @@ int dequeue_link(struct linkqueue* queue, elemtype *elem){
 	return queue ;
 }
 /**************************************queue implemented by link********/
+/*************************************stack implemented by link********/
+struct linkstack {
+	struct link_node *top ;
+	struct link_node *bottom ;
+} ;
+struct linkstack* push_link(struct linkstack *stack, elemtype data){
+	struct link_node *p_tmp = (struct link_node*) malloc(sizeof(struct link_node)) ;
+	p_tmp->data = data ;
+	p_tmp->next = NULL ;
+
+	if(stack->bottom == NULL){
+		stack->bottom = p_tmp ;
+		stack->top = p_tmp ;
+	}else {
+		p_tmp->next = stack->top ;
+		stack->top = p_tmp ;
+	}	
+	return stack ;
+}
+int pop_link(struct linkstack *stack , elemtype *elem){
+	struct link_node *p_tmp = NULL ;
+	if(stack->bottom == NULL){
+		return 0 ;
+	}
+	p_tmp = stack->top ;
+	*elem = stack->top->data ;
+	if(stack->top == stack->bottom){
+		stack->top = NULL ;
+		stack->bottom = NULL ;	
+	}else{
+		stack->top = p_tmp->next ;
+		free(p_tmp) ;
+		p_tmp = NULL ;
+	}
+	return 1 ;
+}
+/*************************************stack implemented by link********/
+
 
 int main()
 {
 	int data[] = {20 ,14, 32, 43,21, 79, 4,9,23,56,42} ;
 	int len = sizeof(data)/sizeof(data[0]) ;
 	int i=0 ;
+	struct linkstack *p_stack = (struct linkstack*)malloc(sizeof(struct linkstack)) ;
+	p_stack->top = NULL ;
+	p_stack->bottom = NULL ;
+	for(i=0;i<len;i++){
+		push_link(p_stack ,data[i]) ;
+	}
+	int tmp ;
+	while(1){
+		if(pop_link(p_stack,&tmp)){
+			printf("%d,",tmp) ;
+		}else{
+			printf("\n") ;
+			printf("stack is empty!\n") ;
+			break ;
+		}
+	}
+/*test queue implemented by link
 	struct linkqueue *p_queue = (struct linkqueue*)malloc(sizeof(struct linkqueue)) ;
 	p_queue->head = NULL ;
 	p_queue->tail = NULL ;
@@ -422,7 +477,7 @@ int main()
 		}
 	}
 	
-/*test queue implemented by link list
+/*test stack implemented by array 
 	for(i=0;i<len;i++){
 		
 		if(!push(data[i])){
