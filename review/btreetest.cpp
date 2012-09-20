@@ -109,6 +109,18 @@ int DeleteNode(BTreeNode<T> *pRoot, T data){
 	}
 	return 1 ;
 }
+template <class T>
+void DestroyBTree(BTreeNode<T> *pRoot){
+	if(pRoot==NULL){
+		return ;
+	}
+	DestroyBTree(pRoot->mLeft) ;
+	cout<<pRoot->mData<<"," ;
+	BTreeNode<T> *pTmp = pRoot->mRight ;
+	delete pRoot ;
+	//DestroyBTree(pRoot->mRight) ;
+	DestroyBTree(pTmp) ;
+}
 int main()
 {
 	int data[]={20,12 ,32, 45, 24, 47,90,87,23} ;
@@ -134,4 +146,7 @@ int main()
 	}else{
 		cout<<"NO"<<endl ;
 	}
+	cout<<"Destroy BTree......."<<endl ;
+	DestroyBTree(pRoot) ;
+	cout<<endl ;
 }
